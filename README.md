@@ -11,5 +11,7 @@ provided by OpenGL.
 ## Museum Plans
 * Multi-Themed Museum, each room having its own theme
 * starting with 4 rooms
-* 
-* 
+* topological map room (entire room is a topological map)
+* ceiling? undecided
+* ![first sculpture](images/sculpture.png)
+* paintings
