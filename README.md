@@ -14,4 +14,4 @@ provided by OpenGL.
 * ceiling? undecided
 * this is a sclpture we'd like to place in the museum 
  ![first sculpture](images/sculpture.png)
-* also undecided 
+* paintings also undecided 
