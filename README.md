@@ -1,10 +1,9 @@
 # SPR18_graphics_project
 
 ## Basic Triangles
-Based on the code provided, we modified the code to show the following:
+Based on the code provided, we modified the code to appear as follows:
 ![Inverted Triforce, with shapes filled](images/full_inv_tri.png)
 ![Inverted Triforce, with wireform edge](images/wire_inv_tri.png)
-
 The `m` key can be pressed to cycle between the three polygon display modes
 provided by OpenGL.
 
@@ -13,5 +12,6 @@ provided by OpenGL.
 * starting with 4 rooms
 * topological map room (entire room is a topological map)
 * ceiling? undecided
-* ![first sculpture](images/sculpture.png)
-* paintings
+* this is a sclpture we'd like to place in the museum 
+ ![first sculpture](images/sculpture.png)
+* also undecided 
