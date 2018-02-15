@@ -26,3 +26,11 @@ provided by OpenGL.
 * We have not started looking for textures for the surfaces in the museum --
   This is something that will depend on the theming of each room, and that too
   has not been settled upon.
+
+
+
+## 2018-02-14 ##
+
+Added basic layout of museum as a blender file in the models directory. I f you
+want a plain link, try [here](models)
+
