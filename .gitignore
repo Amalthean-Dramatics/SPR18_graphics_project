@@ -6,7 +6,7 @@
 *.slo
 *.lo
 *.o
-*.obj
+#*.obj # Also used for 3D model files
 
 # Precompiled Headers
 *.gch
