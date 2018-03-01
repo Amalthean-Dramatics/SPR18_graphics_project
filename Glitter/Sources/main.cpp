@@ -1,5 +1,8 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "warning.h"
+
+//#include <glad/glad.h>
+//#include <GLFW/glfw3.h>
+#include "mesh.h"
 
 #include <iostream>
 
@@ -130,6 +133,12 @@ int main(){
 
     // uncomment this call to draw in wireframe polygons.
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+
+    Mesh box = Mesh("../models/basic_cube.obj");
+
+    box.load_obj_data();
+
 
     // render loop
     // -----------
