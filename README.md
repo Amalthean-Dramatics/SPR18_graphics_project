@@ -31,6 +31,10 @@ provided by OpenGL.
 
 ## 2018-02-14 ##
 
-Added basic layout of museum as a blender file in the models directory. I f you
+Added basic layout of museum as a blender file in the models directory. If you
 want a plain link, try [here](models)
 
+
+## 2018-02-24 ##
+Added some model loader functionality. Running into compilation errors with
+regards to the order in which header files are processed.
