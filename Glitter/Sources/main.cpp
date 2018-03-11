@@ -1,8 +1,9 @@
 #include "warning.h"
 
-//#include <glad/glad.h>
-//#include <GLFW/glfw3.h>
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 #include "mesh.h"
+//#include "Object.h"
 
 #include <iostream>
 
