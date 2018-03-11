@@ -9,6 +9,9 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
+void handleError(GLenum source, GLenum type, GLuint id, GLenum severity,
+                 GLsizei length, const GLchar* message, const void* userParam);
+
 
 //settings
 const unsigned int SCR_WIDTH = 800;
@@ -30,6 +33,10 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 
 int main(){
+
+    /* Enable OpenGL Debug information */
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback( (GLDEBUGPROC) handleError, 0);
 
     // glfw: initialize and configure
     // ------------------------------
@@ -199,4 +206,22 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height){
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0,0,width, height);
+}
+
+/**
+ * Call-back function registered with OpenGL to run on errors.
+ * TODO
+ */
+
+void handleErrors( GLenum source,
+                   GLenum type,
+                   GLuint id,
+                   GLenum severity,
+                   GLsizei length,
+                   const GLchar* message,
+                   const void* userParam )
+{
+  fprintf(stderr, BWHITE "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n" ENDCOL,
+           ( type == GL_DEBUG_TYPE_ERROR ? ERRCOL "** GL ERROR **" : WRNCOL "" ),
+            type, severity, message );
 }
