@@ -34,10 +34,6 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 int main(){
 
-    /* Enable OpenGL Debug information */
-    glEnable(GL_DEBUG_OUTPUT);
-    glDebugMessageCallback( (GLDEBUGPROC) handleError, 0);
-
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -62,6 +58,14 @@ int main(){
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+
+
+    /* Enable OpenGL Debug information */
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback( (GLDEBUGPROC) handleError, 0);
+
+
+
 
     // build and compile our shader program
     // ------------------------------------
@@ -104,50 +108,9 @@ int main(){
     glDeleteShader(fragmentShader);
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
-    float vertices[] = {
-            // Top Triangle
-             0.25f, 0.0f, 0.0f, // top
-             0.5f,  0.5f, 0.0f, // left
-             0.0f,  0.5f, 0.0f, // right
-            // Left Triangle
-            -0.25f, 0.0f, 0.0f, // top
-            -0.5f,  0.5f, 0.0f, // left
-             0.0f,  0.5f, 0.0f, // right
-            // Right Triangle
-             0.25f, 0.0f, 0.0f, // top
-            -0.25f, 0.0f, 0.0f, // left
-             0.0f, -0.5f, 0.0f  // right
-    };
+    Mesh *box = new Mesh("../models/basic_cube.obj");
 
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-    glBindVertexArray(0);
-
-    // uncomment this call to draw in wireframe polygons.
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-
-    Mesh box = Mesh("../models/basic_cube.obj");
-
-    box.load_obj_data();
-
-
+    //box->render(shaderProgram);
     // render loop
     // -----------
     while(!glfwWindowShouldClose(window)){
@@ -161,11 +124,7 @@ int main(){
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // draw our first triangle
-        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glDrawArrays(GL_TRIANGLES, 0, 9);
-        // glBindVertexArray(0); // no need to unbind it every time
+        box->render(shaderProgram);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -175,8 +134,10 @@ int main(){
 
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    //glDeleteVertexArrays(1, &VAO);
+    //glDeleteBuffers(1, &VBO);
+
+    delete box;
 
     // glfw: terminate, clearing all previously allocated GLFW resources
     // -----------------------------------------------------------------
@@ -213,13 +174,13 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height){
  * TODO
  */
 
-void handleErrors( GLenum source,
-                   GLenum type,
-                   GLuint id,
-                   GLenum severity,
-                   GLsizei length,
-                   const GLchar* message,
-                   const void* userParam )
+void handleError( GLenum source,
+                  GLenum type,
+                  GLuint id,
+                  GLenum severity,
+                  GLsizei length,
+                  const GLchar* message,
+                  const void* userParam )
 {
   fprintf(stderr, BWHITE "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n" ENDCOL,
            ( type == GL_DEBUG_TYPE_ERROR ? ERRCOL "** GL ERROR **" : WRNCOL "" ),

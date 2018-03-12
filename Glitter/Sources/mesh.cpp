@@ -49,7 +49,7 @@ void Mesh::render(GLuint shader)
     glUseProgram(shader);
 
     glBindVertexArray(this->vao);
-    glDrawElements(GL_TRIANGLES, this->faces.size, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, this->face.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
 
@@ -76,7 +76,7 @@ void Mesh::bind_buf_data(void)
 
     // Bind the buffer containing the verticies and actually load said buffer.
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, this->vert.size(), vert, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, this->vert.size() * sizeof(glm::vec3), &vert, GL_STATIC_DRAW);
 
     // Set up attribute pointer?
     const GLuint index = 0;
@@ -92,7 +92,7 @@ void Mesh::bind_buf_data(void)
     //Generate index buffer and load with faces
     glGenBuffers(1, &this->indexVbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->indexVbo);
-    glBufferData(GL_ARRAY_BUFFER, this->face.size(), face, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, this->face.size() * sizeof(unsigned int), &face, GL_STATIC_DRAW);
     
     // Unbind VAO to be clean.
     glBindVertexArray(0);
@@ -128,24 +128,26 @@ bool Mesh::load_obj_data(void)
 
 
     aiMesh* mesh = scene->mMeshes[0];
-    numVertices = mesh->mNumVertices;
+    this->numVertices = mesh->mNumVertices;
 
     glm::vec3 vector;
-    for (int i : numVertices) {
+    for (unsigned int i = 0; i < this->numVertices; i++) {
         vector.x = mesh->mVertices[i].x;
         vector.y = mesh->mVertices[i].y;
         vector.z = mesh->mVertices[i].z;
         this->vert.push_back(vector);
     }
+    std::cout << "Model: " << file << " has " << numVertices << " vertices.\n";
 
 
     numFaces = mesh->mNumFaces;
-    for (int i : numFaces) {
+    for (unsigned int i = 0; i < numFaces; i++) {
         // Assuming that it will always be triangles due to the preprocessing
         face.push_back(mesh->mFaces[i].mIndices[0]);
         face.push_back(mesh->mFaces[i].mIndices[1]);
         face.push_back(mesh->mFaces[i].mIndices[2]);
     }
+    std::cout << "Model: " << file << " has " << numFaces << " faces.\n";
 
     // Test that the import was sucessful
     //std::cout << GREEN << "Test:" << (*scene).mMeshes[0] << ENDCOL << std::endl;

@@ -7,8 +7,9 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <fstream>
+//#include <fstream>
 #include <vector>
 #include <glm/vec3.hpp> // glm::vec3
 #include <glm/vec4.hpp> // glm::vec4
@@ -21,12 +22,12 @@ class Mesh
 public:
     Mesh();
     Mesh(std::string filename);
-    void render(GLuint shader)
+    void render(GLuint shader);
     ~Mesh();
 
 private:
     bool load_obj_data(void);
-    bool bind_buf_data(void);
+    void bind_buf_data(void);
 
 
     std::string file;
