@@ -22,6 +22,7 @@
 #define BYELLOW "\e[1;93m"
 #define BMAGENT "\e[1;95m"
 #define BCYAN   "\e[1;96m"
+#define BWHITE  "\e[1;97m"
 
 #define END     "\e[0m"
 
