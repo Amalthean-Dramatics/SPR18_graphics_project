@@ -7,7 +7,7 @@
 #include "mesh.h"
 #include "warning.h"
 #include <assimp/Importer.hpp>  // C++ import interface
-#include <assimp/scene.h>       // The oupput data structure
+#include <assimp/scene.h>       // The output data structure
 #include <assimp/postprocess.h> // Various post-processing options
 
 
@@ -17,16 +17,12 @@
     purpose: creates default instance of Mesh
     --------------------------------------------------------------------------
     requires: nothing
-    ensures: instance of Mesh created such that numVert = numNorm = numFaces
-                     = numIndex = 0; 
-                     file set to default value
+    ensures: instance of Mesh created
+
+    Deprecated. Call Mesh::Mesh(filename) instead.
 ******************************************************************************/
 Mesh::Mesh()
 {
-    numVert = 0;
-    numNorm = 0;
-    numFaces = 0;
-    numIndex = 0;
     file = "default";
 }
 
@@ -35,17 +31,71 @@ Mesh::Mesh()
     purpose: create instance of Mesh with file set to specified fileName
     --------------------------------------------------------------------------
     requires: fileName
-    ensures: instance of Mesh created such that numVert = numNorm = numFaces
-                     = numIndex = 0;
-                     file = #fileName
+    ensures: instance of Mesh created 
 ******************************************************************************/
-Mesh::Mesh(std::string fileName)
+Mesh::Mesh(std::string filename)
 {
-    numVert = 0;
-    numNorm = 0;
-    numFaces = 0;
-    numIndex = 0;
-    file = fileName;
+    this->file = filename;
+
+    load_obj_data();
+    bind_buf_data();
+}
+
+
+
+
+void Mesh::render(GLuint shader)
+{
+    glUseProgram(shader);
+
+    glBindVertexArray(this->vao);
+    glDrawElements(GL_TRIANGLES, this->faces.size, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
+
+
+
+/******** Private members **********/
+
+/******************************************************************************
+    Bind_Buf_Data
+    purpose: TODO
+    --------------------------------------------------------------------------
+******************************************************************************/
+void Mesh::bind_buf_data(void)
+{
+    this->vaoSize = 1;
+    this->vboSize = 1;
+
+    // Generate OpenGL buffer structures
+    glGenVertexArrays(this->vaoSize, &this->vao);
+    glGenBuffers(this->vboSize, &this->vbo);
+
+    // First, we need to bind this vao so our modifications affect it.
+    glBindVertexArray(this->vao);
+
+    // Bind the buffer containing the verticies and actually load said buffer.
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glBufferData(GL_ARRAY_BUFFER, this->vert.size(), vert, GL_STATIC_DRAW);
+
+    // Set up attribute pointer?
+    const GLuint index = 0;
+    const GLint  size = 3;
+    const GLenum type = GL_FLOAT;
+    const GLboolean normalized = GL_FALSE;
+    const GLsizei stride = 0;
+    const GLvoid *pointer = (void *) 0;
+
+    glVertexAttribPointer(index, size, type, normalized, stride, pointer);
+    glEnableVertexAttribArray(0);
+
+    //Generate index buffer and load with faces
+    glGenBuffers(1, &this->indexVbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->indexVbo);
+    glBufferData(GL_ARRAY_BUFFER, this->face.size(), face, GL_STATIC_DRAW);
+    
+    // Unbind VAO to be clean.
+    glBindVertexArray(0);
 }
 
 /******************************************************************************
@@ -76,8 +126,29 @@ bool Mesh::load_obj_data(void)
     return false;
     }
 
+
+    aiMesh* mesh = scene->mMeshes[0];
+    numVertices = mesh->mNumVertices;
+
+    glm::vec3 vector;
+    for (int i : numVertices) {
+        vector.x = mesh->mVertices[i].x;
+        vector.y = mesh->mVertices[i].y;
+        vector.z = mesh->mVertices[i].z;
+        this->vert.push_back(vector);
+    }
+
+
+    numFaces = mesh->mNumFaces;
+    for (int i : numFaces) {
+        // Assuming that it will always be triangles due to the preprocessing
+        face.push_back(mesh->mFaces[i].mIndices[0]);
+        face.push_back(mesh->mFaces[i].mIndices[1]);
+        face.push_back(mesh->mFaces[i].mIndices[2]);
+    }
+
     // Test that the import was sucessful
-    std::cout << GREEN << "Test:" << (*scene).mMeshes[0] << ENDCOL << std::endl;
+    //std::cout << GREEN << "Test:" << (*scene).mMeshes[0] << ENDCOL << std::endl;
     return true;
 }
 

@@ -7,7 +7,6 @@
 #pragma once
 #include <string>
 #include <iostream>
-//#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <fstream>
 #include <vector>
@@ -21,18 +20,28 @@ class Mesh
 {
 public:
     Mesh();
-    Mesh(std::string fileName);
-    bool load_obj_data(void);
+    Mesh(std::string filename);
+    void render(GLuint shader)
     ~Mesh();
 
 private:
-    int numVert;
-    int numNorm;
-    int numFaces;
-    int numIndex;
-    
-    std::vector<float> vao;
-    std::vector<float> vbo;
+    bool load_obj_data(void);
+    bool bind_buf_data(void);
+
+
+    std::string file;
+
+    unsigned int vao;
+    unsigned int vaoSize;
+    unsigned int vbo;
+    unsigned int vboSize;
+    unsigned int indexVbo;
+
+    unsigned int numVertices;
+    unsigned int numFaces;
+
+    std::vector<glm::vec3> vert;
+    std::vector<unsigned int> face;
     //std::vector<glm::vec4> vertList;
     //std::vector<glm::vec4> tempVertList;
     //std::vector<glm::vec4> normList;
@@ -42,6 +51,5 @@ private:
     //uint32_t *index;
     //uint32_t buffer, IndexBuffer;
 
-    std::string file;
 };
 
