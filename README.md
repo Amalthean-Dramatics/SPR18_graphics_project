@@ -38,3 +38,8 @@ want a plain link, try [here](models)
 ## 2018-02-24 ##
 Added some model loader functionality. Running into compilation errors with
 regards to the order in which header files are processed.
+
+
+## 2018-03-07 ##
+Loads the model correctly, but seems to have some rendering errors on some
+computers (memory issues?).
