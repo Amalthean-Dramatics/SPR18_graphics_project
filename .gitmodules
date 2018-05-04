@@ -22,3 +22,6 @@
     path = Glitter/Vendor/bullet
     url = https://github.com/bulletphysics/bullet3.git
     branch = master
+[submodule "Glitter/Vendor/apathy"]
+	path = Glitter/Vendor/apathy
+	url = https://github.com/dlecocq/apathy.git
