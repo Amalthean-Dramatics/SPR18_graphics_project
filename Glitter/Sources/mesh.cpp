@@ -55,8 +55,8 @@ void Mesh::render(GLuint shader)
 
 
 
-/******** Private members **********/
 
+/******** Private members **********/
 /******************************************************************************
     Bind_Buf_Data
     purpose: TODO
@@ -76,7 +76,7 @@ void Mesh::bind_buf_data(void)
 
     // Bind the buffer containing the verticies and actually load said buffer.
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, this->vert.size() * sizeof(glm::vec3), &vert, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, this->vert.size() * sizeof(glm::vec3), vert.data(), GL_STATIC_DRAW);
 
     // Set up attribute pointer?
     const GLuint index = 0;
@@ -92,7 +92,7 @@ void Mesh::bind_buf_data(void)
     //Generate index buffer and load with faces
     glGenBuffers(1, &this->indexVbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->indexVbo);
-    glBufferData(GL_ARRAY_BUFFER, this->face.size() * sizeof(unsigned int), &face, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->face.size() * sizeof(unsigned int), face.data(), GL_STATIC_DRAW);
     
     // Unbind VAO to be clean.
     glBindVertexArray(0);

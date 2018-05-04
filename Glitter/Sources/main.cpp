@@ -108,7 +108,7 @@ int main(){
     glDeleteShader(fragmentShader);
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
-    Mesh *box = new Mesh("../models/basic_cube.obj");
+    Mesh *box = new Mesh("../models/test_obj.obj");
 
     //box->render(shaderProgram);
     // render loop
