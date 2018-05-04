@@ -17,14 +17,16 @@ void handleError(GLenum source, GLenum type, GLuint id, GLenum severity,
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-const char *vertexShaderSource = "#version 330 core\n"
+const char *vertexShaderSource = 
+        "#version 450 core\n"
         "layout (location = 0) in vec3 aPos;\n"
         "void main()\n"
         "{\n"
         "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
         "}\0";
 
-const char *fragmentShaderSource = "#version 330 core\n"
+const char *fragmentShaderSource = 
+        "#version 450 core\n"
         "out vec4 FragColor;\n"
         "void main()\n"
         "{\n"
@@ -43,7 +45,7 @@ int main(){
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Sundaram_Myers Trianglessssssssss", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Amalthean Dramatics", NULL, NULL);
     if(window == NULL){
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -121,7 +123,8 @@ int main(){
 
         // render
         // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   //Teal
+        glClearColor(0.3255f, 0.4078f, 0.4706f, 1.0f);   // Payne's Grey
         glClear(GL_COLOR_BUFFER_BIT);
 
         box->render(shaderProgram);
