@@ -76,8 +76,10 @@ Shader::~Shader()
 ******************************************************************************/
 uint32_t Shader::load_file(std::string file, GLenum type)
 {
+#ifndef NDEBUG
     //DEBUG!!!
     std::cout << BGREEN << "File path is: " << file << ENDCOL << std::endl;
+#endif
     //Error check this!
     std::ifstream f(file);
 
@@ -87,7 +89,7 @@ uint32_t Shader::load_file(std::string file, GLenum type)
     const char* program = contents.c_str();              
 
 #ifndef NDEBUG
-    std::cout << BGREEN << "File program is: " << ENDCOL << program << std::endl;
+    std::cout << BGREEN << "File program is: \n" << ENDCOL << program << std::endl;
 #endif
 
     // Now create and compile the shader!
