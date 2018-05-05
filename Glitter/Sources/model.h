@@ -16,6 +16,7 @@
 // glm::translate, glm::rotate, glm::scale, glm::perspective
 
 #include "shader.h"
+#include "camera.h"
 #include "mesh.h"
 
 #include <assimp/scene.h>       // The output data structure
@@ -24,13 +25,17 @@
 class Model
 {
 public:
-    Model(std::string filename);
-    void render(Shader* shader);
+    Model(std::string filename, Shader* shade);
+    Model(std::string filename, Shader* shade, glm::vec3 pos);
+    void render(Camera* camera);
     ~Model();
 
 private:
     std::vector<Mesh> meshes;
     std::string file;
+
+    Shader* shader;
+    glm::vec3 pos;
 
     bool load_model(void);
 };

@@ -19,15 +19,23 @@
 // glm::translate, glm::rotate, glm::scale, glm::perspective
 
 // Oooohhh, input-method independent directions!
+// Bit-twiddling!!!
 enum direction_t {
-    FORWARDS,
-    BACKWARDS,
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN,
-    ROLL_LEFT,
-    ROLL_RIGHT
+    NONE       = 0x00,
+    FORWARDS   = 0x01,
+    BACKWARDS  = 0x02,
+    LEFT       = 0x04,
+    RIGHT      = 0x08,
+    UP         = 0x10,
+    DOWN       = 0x20,
+    ROLL_LEFT  = 0x40,
+    ROLL_RIGHT = 0x80
+};
+
+// Viewport projection types
+enum view_t {
+    ORTHOGRAPHIC,
+    PERSPECTIVE
 };
 
 //Type-safe default constants
@@ -35,7 +43,7 @@ const float PITCH =   0.0f;
 const float ROLL  =   0.0f;
 const float YAW   = -90.0f;
 const float SPEED =   2.5f;
-const float SENSE =   0.1f;
+const float SENSE =   0.5f;
 const float ZOOM  =  45.0f;
 
 const float MIN_ZOOM =  1.0f;
@@ -47,27 +55,43 @@ class Camera
 public:
     Camera(glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f),
            glm::vec3 up  = glm::vec3(0.0f, 1.0f, 0.0f),
-           float yaw = YAW, float pitch = PITCH) : roll(PITCH),
+           float yaw = YAW, float pitch = PITCH) : roll(ROLL),
                                                    speed(SPEED),
-                                                   zoom(ZOOM),
                                                    sensitivity(SENSE),
-                                                   front(glm::vec3(0.0f, 0.0f, 0.0f))
+                                                   zoom(ZOOM),
+                                                   front(glm::vec3(0.0f, 0.0f, 1.0f))
     {
-        //TODO
+        this->pos       = pos;
+        this->global_up = up;
+        this->yaw       = yaw;
+        this->pitch     = pitch;
+
+        // Properly update everything
+        update_vectors();
     }
 
-    Camera(float pos_x, float pos_y, float pos_z,
-           float up_x,  float up_y,  float up_z,
-           float yaw,   float pitch)  :  roll(PITCH),
-                                         speed(SPEED),
-                                         zoom(ZOOM),
-                                         sensitivity(SENSE),
-                                         front(glm::vec3(0.0f, 0.0f, 0.0f))
+    glm::mat4 get_view(view_t projection);
+    glm::mat4 get_view()
     {
-        //TODO
+        return this->get_view(this->view);
     }
 
-    glm::mat4 get_view(void);
+
+
+    void set_fov(float field)
+    {
+        this->fov = field;
+    }
+
+    void set_render(view_t type)
+    {
+        this->view = type;
+    }
+    void update_window(int w, int h)
+    {
+        this->width  = (float) w;
+        this->height = (float) h;
+    }
 
     void process_kbd(direction_t dir, float dt);
     void process_mouse(float x_off, float y_off, bool lock_pitch=true);
@@ -84,6 +108,9 @@ private:
     float rot;
     float sensitivity;
     float zoom;
+    float fov;
+
+    view_t view;
 
     // Locational attributes
     glm::vec3 pos;
@@ -91,6 +118,10 @@ private:
     glm::vec3 local_up;
     glm::vec3 local_right;
     glm::vec3 global_up;
+
+    // Window attributes
+    float width;
+    float height;
 
     void update_vectors(void);
 };

@@ -15,20 +15,39 @@
     PARAMETERIZED CONSTRUCTOR
     purpose: create instance of Model with file set to specified fileName
     --------------------------------------------------------------------------
-    requires: fileName
+    requires: fileName, shade
     ensures: instance of Model created 
 ******************************************************************************/
-Model::Model(std::string filename)
+Model::Model(std::string filename, Shader* shade)
+        : Model(filename, shade, glm::vec3(0.0, 0.0, 0.0))
 {
-    this->file = filename;
+
+}
+
+/******************************************************************************
+    PARAMETERIZED CONSTRUCTOR
+    purpose: create instance of Model with file set to specified fileName
+    --------------------------------------------------------------------------
+    requires: fileName, shade, pos
+    ensures: instance of Model created at position pos
+******************************************************************************/
+Model::Model(std::string filename, Shader* shade, glm::vec3 pos)
+{
+    this->file   = filename;
+    this->pos    = pos;
+    this->shader = shade;
 
     load_model();
 }
 
 
-void Model::render(Shader* shader)
+void Model::render(Camera* camera)
 {
     shader->enable();
+
+    glm::mat4 pos_mat = glm::translate(glm::mat4(1.0f), pos);
+
+    shader->set_uni_matrix(camera->get_view() * pos_mat);
 
     for (auto& i: meshes) {
         //std::cout << BGREEN << "Testing!" << ENDCOL << std::endl;
