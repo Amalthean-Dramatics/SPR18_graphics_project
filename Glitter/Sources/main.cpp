@@ -72,7 +72,9 @@ int main(){
     Shader *test = new Shader("shaders/ortho.vs", "shaders/ortho.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
-    Model *box = new Model("models/basic_cube.obj", test);
+    //Model *box = new Model("models/basic_cube.obj", test);
+    //Model *box = new Model("models/test_obj.obj", test);
+    Model *box = new Model("models/test_obj.obj", test);
 
 
     //Handle key presses using callback functions
@@ -133,6 +135,7 @@ void key_call(GLFWwindow* window __attribute__((unused)), int key,
     const int mode[] = {GL_LINE, GL_POINT, GL_FILL};
     static uint8_t state = 0;
     static uint8_t rend = 0;
+    static double last_time = 0;
     int dir = NONE;
 
     /* I immediately regret my decision */
@@ -148,7 +151,11 @@ void key_call(GLFWwindow* window __attribute__((unused)), int key,
         if (key == GLFW_KEY_C)    dir |= DOWN;      
     }
 
-    cam->process_kbd((direction_t)dir, 1);
+    double delta = glfwGetTime();
+
+    cam->process_kbd((direction_t)dir, delta - last_time);
+
+    last_time = delta;
 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
