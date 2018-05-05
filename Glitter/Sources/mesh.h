@@ -16,17 +16,20 @@
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/gtc/matrix_transform.hpp> 
 // glm::translate, glm::rotate, glm::scale, glm::perspective
+#include <assimp/scene.h>
+
+#include "shader.h"
+
 
 class Mesh
 {
 public:
-    Mesh();
-    Mesh(std::string filename);
-    void render(GLuint shader);
+    Mesh(const aiScene* scene, uint32_t index, std::string filename);
+    void render(void);
     ~Mesh();
 
 private:
-    bool load_obj_data(void);
+    bool load_obj_data(const aiScene* scene, uint32_t index);
     void bind_buf_data(void);
 
 

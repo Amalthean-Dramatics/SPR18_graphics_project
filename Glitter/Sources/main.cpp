@@ -5,7 +5,7 @@
 #include "../Vendor/apathy/path.hpp"
 
 #include "shader.h"
-#include "mesh.h"
+#include "model.h"
 
 #include <iostream>
 
@@ -53,7 +53,7 @@ int main(){
 
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
-    Mesh *box = new Mesh("../models/test_obj.obj");
+    Model *box = new Model("../models/test_obj.obj");
 
     // Setup shaders
     apathy::Path root("../shaders/"); // TODO
@@ -76,7 +76,7 @@ int main(){
         glClearColor(0.3255f, 0.4078f, 0.4706f, 1.0f);   // Payne's Grey
         glClear(GL_COLOR_BUFFER_BIT);
 
-        box->render(test->shader_id);
+        box->render(test);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

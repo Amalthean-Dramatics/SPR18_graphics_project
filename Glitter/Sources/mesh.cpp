@@ -6,7 +6,6 @@
 
 #include "mesh.h"
 #include "warning.h"
-#include <assimp/Importer.hpp>  // C++ import interface
 #include <assimp/scene.h>       // The output data structure
 #include <assimp/postprocess.h> // Various post-processing options
 
@@ -16,41 +15,25 @@
 
 
 /******************************************************************************
-    DEFAULT CONSTRUCTOR
-    purpose: creates default instance of Mesh
-    --------------------------------------------------------------------------
-    requires: nothing
-    ensures: instance of Mesh created
-
-    Deprecated. Call Mesh::Mesh(filename) instead.
-******************************************************************************/
-Mesh::Mesh()
-{
-    file = "default";
-}
-
-/******************************************************************************
     PARAMETERIZED CONSTRUCTOR
     purpose: create instance of Mesh with file set to specified fileName
     --------------------------------------------------------------------------
     requires: fileName
     ensures: instance of Mesh created 
 ******************************************************************************/
-Mesh::Mesh(std::string filename)
+Mesh::Mesh(const aiScene* scene, uint32_t index, std::string filename)
 {
     this->file = filename;
 
-    load_obj_data();
+    load_obj_data(scene, index);
     bind_buf_data();
 }
 
 
 
 
-void Mesh::render(GLuint shader)
+void Mesh::render(void)
 {
-    glUseProgram(shader);
-
     glBindVertexArray(this->vao);
     glDrawElements(GL_TRIANGLES, this->face.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
@@ -112,25 +95,9 @@ void Mesh::bind_buf_data(void)
                      screen for debugging purposes.
     returns: true on success, false on failure
 ******************************************************************************/
-bool Mesh::load_obj_data(void)
+bool Mesh::load_obj_data(const aiScene* scene, uint32_t ind)
 {
-    Assimp::Importer import;
-
-    // Actually use the importer to load a file
-    const aiScene* scene = import.ReadFile(file,
-                              aiProcess_Triangulate
-                            | aiProcess_FlipUVs
-                            | aiProcess_CalcTangentSpace
-                            | aiProcess_JoinIdenticalVertices);
-    if (!scene) {
-        // The file could not be read or some other error occurred
-        std::cout << ERRCOL << "ERROR:ASSIMP-MODEL_IMPORT: " 
-                  << import.GetErrorString() << ENDCOL << std::endl;
-    return false;
-    }
-
-
-    aiMesh* mesh = scene->mMeshes[0];
+    aiMesh* mesh = scene->mMeshes[ind];
     this->numVertices = mesh->mNumVertices;
 
     glm::vec3 vector;
