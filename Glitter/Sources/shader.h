@@ -31,8 +31,6 @@ private:
     uint16_t vertex_id;
     uint16_t fragment_id;
 
-
-
-    uint16_t load_file(std::string file, GLenum type);
+    uint32_t load_file(std::string file, GLenum type);
 };
 
