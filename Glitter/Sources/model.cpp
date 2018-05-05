@@ -75,7 +75,9 @@ bool Model::load_model(void)
         meshes.push_back(mesh);
     }
 
+#ifndef NDEBUG
     std::cout << "Model: " << file << " has " << scene->mNumMeshes << " meshes.\n";
+#endif
 
     // Test that the import was sucessful
     //std::cout << GREEN << "Test:" << (*scene).mModeles[0] << ENDCOL << std::endl;

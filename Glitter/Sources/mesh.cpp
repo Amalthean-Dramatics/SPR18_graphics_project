@@ -107,7 +107,10 @@ bool Mesh::load_obj_data(const aiScene* scene, uint32_t ind)
         vector.z = mesh->mVertices[i].z;
         this->vert.push_back(vector);
     }
+
+#ifndef NDEBUG
     std::cout << "Model: " << file << " has " << numVertices << " vertices.\n";
+#endif
 
 
     numFaces = mesh->mNumFaces;
@@ -117,9 +120,10 @@ bool Mesh::load_obj_data(const aiScene* scene, uint32_t ind)
         face.push_back(mesh->mFaces[i].mIndices[1]);
         face.push_back(mesh->mFaces[i].mIndices[2]);
     }
+#ifndef NDEBUG
     std::cout << "Model: " << file << " has " << numFaces << " faces.\n";
+#endif
 
-    /*
 
     unsigned int texture;
     glGenTextures(1, &texture);
@@ -141,7 +145,6 @@ bool Mesh::load_obj_data(const aiScene* scene, uint32_t ind)
     }
     stbi_image_free(data);
 
-    */
 
 
     // Test that the import was sucessful

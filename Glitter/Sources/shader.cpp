@@ -86,7 +86,9 @@ uint32_t Shader::load_file(std::string file, GLenum type)
                           std::istreambuf_iterator<char>());
     const char* program = contents.c_str();              
 
+#ifndef NDEBUG
     std::cout << BGREEN << "File program is: " << ENDCOL << program << std::endl;
+#endif
 
     // Now create and compile the shader!
     int success;
