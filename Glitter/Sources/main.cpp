@@ -23,6 +23,7 @@ const unsigned int SCR_HEIGHT = 600;
 
 // Sadness....
 Camera* cam = new Camera();
+double delta = 0;
 
 
 int main(){
@@ -74,7 +75,7 @@ int main(){
     // set up vertex data (and buffer(s)) and configure vertex attributes
     //Model *box = new Model("models/basic_cube.obj", test);
     //Model *box = new Model("models/test_obj.obj", test);
-    Model *box = new Model("models/test_obj.obj", test);
+    Model *box = new Model("models/museum.obj", test);
 
 
     //Handle key presses using callback functions
@@ -84,17 +85,19 @@ int main(){
     glfwSetCursorPosCallback(window, mouse_call);
 
 
-    //box->render(shaderProgram);
+    /* Set up some variables to track how long each frame takes to get
+     * smooth(er) movement*/
+    double last = 0.0;
+    double curr = 0.0;
+
     // render loop
     // -----------
     while(!glfwWindowShouldClose(window)){
 
-        //test->enable();
-        //view = glm::rotate(view, glm::radians(5.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        //test->set_uni_matrix(view);
-        // input
-        // -----
-        //processInput(window);
+        curr  = glfwGetTime();
+
+        delta = curr - last;
+        last  = curr;
 
         // render
         // ------
@@ -112,9 +115,6 @@ int main(){
 
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
-    //glDeleteVertexArrays(1, &VAO);
-    //glDeleteBuffers(1, &VBO);
-
     delete box;
     delete test;
 
@@ -135,7 +135,6 @@ void key_call(GLFWwindow* window __attribute__((unused)), int key,
     const int mode[] = {GL_LINE, GL_POINT, GL_FILL};
     static uint8_t state = 0;
     static uint8_t rend = 0;
-    static double last_time = 0;
     int dir = NONE;
 
     /* I immediately regret my decision */
@@ -151,11 +150,9 @@ void key_call(GLFWwindow* window __attribute__((unused)), int key,
         if (key == GLFW_KEY_C)    dir |= DOWN;      
     }
 
-    double delta = glfwGetTime();
 
-    cam->process_kbd((direction_t)dir, delta - last_time);
+    cam->process_kbd((direction_t)dir, delta);
 
-    last_time = delta;
 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);

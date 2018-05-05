@@ -1,0 +1,19 @@
+# Blender MTL File: 'basic_idea.blend'
+# Material Count: 2
+
+newmtl None
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /fserv/home/wmyers/Documents/CSE/CSE389_Graphics/SPR18_graphics_project/images/salmon_navy_canvas.png
+
+newmtl None_NONE
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2

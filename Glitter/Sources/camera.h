@@ -42,7 +42,7 @@ enum view_t {
 const float PITCH =   0.0f;
 const float ROLL  =   0.0f;
 const float YAW   = -90.0f;
-const float SPEED =   2.5f;
+const float SPEED =   9.5f;
 const float SENSE =   0.5f;
 const float ZOOM  =  45.0f;
 
