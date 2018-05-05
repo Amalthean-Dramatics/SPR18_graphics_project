@@ -28,7 +28,7 @@ enum direction_t {
     DOWN,
     ROLL_LEFT,
     ROLL_RIGHT
-}
+};
 
 //Type-safe default constants
 const float PITCH =   0.0f;
@@ -42,16 +42,16 @@ const float MIN_ZOOM =  1.0f;
 const float MAX_ZOOM = 45.0f;
 
 
-class Mesh
+class Camera
 {
 public:
     Camera(glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f),
            glm::vec3 up  = glm::vec3(0.0f, 1.0f, 0.0f),
-           float yaw,     float pitch) : roll(PITCH),
-                                         speed(SPEED),
-                                         zoom(ZOOM),
-                                         sensitivity(SENSE),
-                                         front(glm::vec3(0.0f, 0.0f, 0.0f))
+           float yaw = YAW, float pitch = PITCH) : roll(PITCH),
+                                                   speed(SPEED),
+                                                   zoom(ZOOM),
+                                                   sensitivity(SENSE),
+                                                   front(glm::vec3(0.0f, 0.0f, 0.0f))
     {
         //TODO
     }
@@ -62,7 +62,7 @@ public:
                                          speed(SPEED),
                                          zoom(ZOOM),
                                          sensitivity(SENSE),
-                                         front(glm::vec3(0.0f, 0.0f, 0.0f));
+                                         front(glm::vec3(0.0f, 0.0f, 0.0f))
     {
         //TODO
     }
@@ -81,6 +81,7 @@ private:
 
     // Camera options
     float speed;
+    float rot;
     float sensitivity;
     float zoom;
 
