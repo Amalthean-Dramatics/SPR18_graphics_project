@@ -2,8 +2,10 @@
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include "../Vendor/apathy/path.hpp"
+
+#include "shader.h"
 #include "mesh.h"
-//#include "Object.h"
 
 #include <iostream>
 
@@ -16,23 +18,6 @@ void handleError(GLenum source, GLenum type, GLuint id, GLenum severity,
 //settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-
-const char *vertexShaderSource = 
-        "#version 450 core\n"
-        "layout (location = 0) in vec3 aPos;\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-        "}\0";
-
-const char *fragmentShaderSource = 
-        "#version 450 core\n"
-        "out vec4 FragColor;\n"
-        "void main()\n"
-        "{\n"
-        "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-        "}\n\0";
-
 
 int main(){
 
@@ -67,50 +52,14 @@ int main(){
     glDebugMessageCallback( (GLDEBUGPROC) handleError, 0);
 
 
-
-
-    // build and compile our shader program
-    // ------------------------------------
-    // vertex shader
-    int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    // check for shader compile errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // fragment shader
-    int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    // check for shader compile errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // link shaders
-    int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    // check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
     // set up vertex data (and buffer(s)) and configure vertex attributes
     Mesh *box = new Mesh("../models/test_obj.obj");
+
+    // Setup shaders
+    apathy::Path root("../shaders/"); // TODO
+    Shader *test = new Shader("../shaders/simple.vs", "../shaders/simple.fs");
+
+    test->enable();
 
     //box->render(shaderProgram);
     // render loop
@@ -127,7 +76,7 @@ int main(){
         glClearColor(0.3255f, 0.4078f, 0.4706f, 1.0f);   // Payne's Grey
         glClear(GL_COLOR_BUFFER_BIT);
 
-        box->render(shaderProgram);
+        box->render(test->shader_id);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -141,6 +90,7 @@ int main(){
     //glDeleteBuffers(1, &VBO);
 
     delete box;
+    delete test;
 
     // glfw: terminate, clearing all previously allocated GLFW resources
     // -----------------------------------------------------------------
