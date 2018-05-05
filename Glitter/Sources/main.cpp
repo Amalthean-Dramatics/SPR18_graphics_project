@@ -5,6 +5,7 @@
 #include "../Vendor/apathy/path.hpp"
 
 #include "shader.h"
+#include "camera.h"
 #include "model.h"
 
 #include <iostream>
@@ -46,6 +47,9 @@ int main(){
         return -1;
     }
 
+    Camera cam();
+    glm::mat4 view(1.0f);
+
 
     /* Enable OpenGL Debug information */
     glEnable(GL_DEBUG_OUTPUT);
@@ -53,11 +57,11 @@ int main(){
 
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
-    Model *box = new Model("../models/test_obj.obj");
+    Model *box = new Model("models/test_obj.obj");
 
     // Setup shaders
-    apathy::Path root("../shaders/"); // TODO
-    Shader *test = new Shader("../shaders/simple.vs", "../shaders/simple.fs");
+    apathy::Path root("shaders/"); // TODO
+    Shader *test = new Shader("shaders/ortho.vs", "shaders/ortho.fs");
 
     test->enable();
 
@@ -66,6 +70,9 @@ int main(){
     // -----------
     while(!glfwWindowShouldClose(window)){
 
+        test->enable();
+        view = glm::rotate(view, glm::radians(5.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        test->set_uni_matrix(view);
         // input
         // -----
         processInput(window);
@@ -115,7 +122,8 @@ void processInput(GLFWwindow* window){
 }
 
 //glfw: whenever the window size changed (by OS or user resize) this callback function executes
-void framebuffer_size_callback(GLFWwindow* window, int width, int height){
+void framebuffer_size_callback(GLFWwindow* window __attribute__((unused)),
+                               int width, int height){
 
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
@@ -127,13 +135,13 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height){
  * TODO
  */
 
-void handleError( GLenum source,
+void handleError( GLenum source __attribute__((unused)),
                   GLenum type,
-                  GLuint id,
+                  GLuint id __attribute__((unused)),
                   GLenum severity,
-                  GLsizei length,
+                  GLsizei length __attribute__((unused)),
                   const GLchar* message,
-                  const void* userParam )
+                  const void* userParam __attribute__((unused)))
 {
   fprintf(stderr, BWHITE "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n" ENDCOL,
            ( type == GL_DEBUG_TYPE_ERROR ? ERRCOL "** GL ERROR **" : WRNCOL "" ),

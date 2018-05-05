@@ -7,6 +7,9 @@
 #include "shader.h"
 #include "warning.h"
 
+#include <glm/detail/type_mat.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 
 Shader::Shader(std::string vertex_name, std::string fragment_name)
@@ -20,7 +23,7 @@ Shader::Shader(std::string vertex_name, std::string fragment_name)
     glAttachShader(shader_id, vertex_id);
     glAttachShader(shader_id, fragment_id);
 
-    // Bind to caller's VAO
+    // Bind to caller's VAO (Causing errors, so leaving out atm)
     //glBindAttribLocation(shader_id, 0, "position");
 
     // Actually link it!
@@ -36,18 +39,46 @@ Shader::Shader(std::string vertex_name, std::string fragment_name)
         std::cout << ERRCOL << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
                   << ENDCOL << infoLog << std::endl;
     }
-    
 
+
+    // Get uniforms so that they can be set later
+    proj_matrix = get_uniform_location("view_matrix");
+    tex_bool = get_uniform_location("has_tex");
 }
 
+
+/**
+ * Enable the given shader
+ */
 void Shader::enable(void)
 {
     glUseProgram(shader_id);
 }
 
+/**
+ * Disable the given shader
+ */
 void Shader::disable(void)
 {
     glUseProgram(0);
+}
+
+/**
+ * Set the universal view matrix for the vertex shader
+ */
+
+void Shader::set_uni_matrix(glm::mat4 mat)
+{
+    glUniformMatrix4fv(proj_matrix, 1, GL_FALSE, glm::value_ptr(mat));
+}
+
+/**
+ * Set whether the fragment shader uses a texture or whether it uses a (flat) colour
+ */
+
+void Shader::set_has_tex(bool val)
+{
+    glUniform1i(tex_bool, val);
 }
 
 /**
@@ -113,3 +144,15 @@ uint32_t Shader::load_file(std::string file, GLenum type)
 }
 
 
+/**
+ * Wrapper function to get a given uniform location and error-catch.
+ */
+GLint Shader::get_uniform_location(std::string uniform)
+{
+    GLint location = glGetUniformLocation(shader_id, uniform.c_str());
+    if (location == -1) {
+        std::cout << WRNCOL << "WARN: Uniform \"" << uniform 
+                  << "\" not found in shader"     << ENDCOL << std::endl;
+    }
+    return location;
+}
