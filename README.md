@@ -7,15 +7,16 @@ flaws existing in it. Texture rendering seems to be less than perfect, although
 that may be due to a lack of proper set-up in Blender.  Unfortunately, we were unable to dedicate as much time to our model as we both would have liked, leaving that aspect less polished. The organization is as follows:
 
 |`images`   | Various images for textures or including in the documentation |
+|-----------|---------------------------------------------------------------|
 |`models`   | 3D models, with very imaginative names                        |
 |`shaders`  | Shaders used in the program                                   |
 |`textures` | Textures used in the program                                  |
 
 ### Controls
-`w, a, s, d` -- Move forward, left, backward, and right
-`z, c`       -- Move up and down
-`m`          -- Toggle the polygon rendering mode (touchy)
-`ESC`        -- Exit the museum
+`w, a, s, d` -- Move forward, left, backward, and right  
+`z, c`       -- Move up and down  
+`m`          -- Toggle the polygon rendering mode (touchy)  
+`ESC`        -- Exit the museum  
 
 Apologies for turning this in slightly late -- We've both had rather busy
 semesters and busy finals weeks. Thank you so much for a great class, and have a
